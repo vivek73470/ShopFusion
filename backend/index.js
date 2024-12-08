@@ -32,7 +32,7 @@ app.use('/contact',contactRouter)
 // })
 
 
-// Database Connection
+// Database Connections
 const startServer = async () => {
     try {
         await Connection;
