@@ -21,12 +21,27 @@ app.use('/orders',orderRouter)
 app.use('/contact',contactRouter)
 
 
-app.listen(process.env.port, async () => {
+// app.listen(process.env.port, async () => {
+//     try {
+//         await Connection
+//         console.log("connected to db")
+//     } catch (e) {
+// console.log(e)
+//     }
+//     console.log(`server running on port ${process.env.port}`)
+// })
+
+
+// Database Connection
+const startServer = async () => {
     try {
-        await Connection
-        console.log("connected to db")
+        await Connection;
+        console.log("Connected to DB");
     } catch (e) {
-console.log(e)
+        console.log("DB connection error:", e);
     }
-    console.log(`server running on port ${process.env.port}`)
-})
+};
+
+startServer();
+
+module.exports = app;
