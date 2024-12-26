@@ -9,6 +9,8 @@ const cors = require('cors');
 require('dotenv').config()
 const app = express();
 
+const PORT = process.env.port || 4500;
+
 app.use(express.json())
 app.use(cors({
     origin:"*"
@@ -21,27 +23,16 @@ app.use('/orders',orderRouter)
 app.use('/contact',contactRouter)
 
 
-// app.listen(process.env.port, async () => {
-//     try {
-//         await Connection
-//         console.log("connected to db")
-//     } catch (e) {
-// console.log(e)
-//     }
-//     console.log(`server running on port ${process.env.port}`)
-// })
-
-
-// Database Connections
-const startServer = async () => {
+app.listen(PORT, async () => {
     try {
-        await Connection;
-        console.log("Connected to DB");
+        await Connection
+        console.log("connected to db")
     } catch (e) {
-        console.log("DB connection error:", e);
+console.log(e)
     }
-};
+    console.log(`server running on port ${PORT}`)
+})
 
-startServer();
+
 
 module.exports = app;
