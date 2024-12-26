@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import './login.css'
-import { signIn, signInGoogle } from '../../Redux/auth/action'
+import { signIn } from '../../Redux/auth/action'
+// import { signInGoogle } from '../../Redux/auth/action'
 import { useNavigate } from 'react-router-dom';
 import slider from '../../Assets/Slide.png'
-import google from '../../Assets/Google.png'
+// import google from '../../Assets/Google.png'
 import { Link } from 'react-router-dom';
 import Footer from '../../Components/Footer/footer'
 import Navbar from '../../Components/Navbar/Navbar';
@@ -68,15 +69,15 @@ function Login() {
             }
         }
     };
-    const handleSignInGoogle = async () => {
-        const response = await dispatch(signInGoogle());
-        if (response.status) {
-            navigate('/admin');
-        }
-        else {
-            alert("error while signIn with Google")
-        }
-    }
+    // const handleSignInGoogle = async () => {
+    //     const response = await dispatch(signInGoogle());
+    //     if (response.status) {
+    //         navigate('/admin');
+    //     }
+    //     else {
+    //         alert("error while signIn with Google")
+    //     }
+    // }
  
     return (
 
@@ -134,12 +135,12 @@ function Login() {
                             <span className='forget-pass'>Forgot password ?</span>
                         </Link>
                     </div>
-                    <div className='login-with-google' onClick={handleSignInGoogle}>
+                    {/* <div className='login-with-google' onClick={handleSignInGoogle}>
                         <div className='google-width-sett'>
                         <img src={google} alt="google" />
                         </div>
                         <span>Sign In with Google</span>
-                    </div>
+                    </div> */}
                 </div>
 
             </div>
