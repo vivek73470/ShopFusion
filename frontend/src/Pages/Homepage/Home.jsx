@@ -30,7 +30,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
   const dispatch = useDispatch()
-  const seller = useSelector((store) => store.ProductReducer.products.slice(0, 6))
+  const seller = useSelector((store) => store.ProductReducer.products?.slice(0, 6))
 
   useEffect(() => {
     dispatch(fetchData()); 
