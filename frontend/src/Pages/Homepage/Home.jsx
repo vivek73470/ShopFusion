@@ -139,7 +139,7 @@ function Home() {
             </div>
             <Link to="/products">
               <div className='seller-design-data'>
-                  {seller.length > 0 && seller.map((elem) =>
+                  {seller?.length > 0 && seller.map((elem) =>
                     <div className='best-seller-imgeeq' key={elem.id}>
                       <img src={elem.image} alt='' />
                     </div>
