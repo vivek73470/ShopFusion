@@ -7,8 +7,7 @@ import { FaBars } from "react-icons/fa";
 import { TbLogout } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
 import { IoMdCart } from "react-icons/io";
-import {toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import notify from '../../utils/toastNotifications';
 
 // takes a prop named Children.
 function Sidebar({ children }) {
@@ -50,7 +49,7 @@ function Sidebar({ children }) {
     localStorage.removeItem('token')
     localStorage.removeItem('userId');
     navigate('/login')
-    toast.success("Logout Successfully!");
+    notify.success("Logout Successfully!");
   }
 
 

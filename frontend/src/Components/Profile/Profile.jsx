@@ -15,8 +15,8 @@ function Profile() {
 
   const Menus = [
     {
-      title: 'Profile',
-      path: '/admin/profile',
+      title: 'Dashboard',
+      path: '/admin/dashboard',
     },
     token && {
       title: 'Logout',

@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { addProducts, startLoading, stopLoading } from '../../Redux/products/action';
-import { toast } from 'react-toastify';
 import { storage } from '../../firebase/firebase.config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import notify from '../../utils/toastNotifications';
 
 function Addproduct() {
   const navigate = useNavigate()
@@ -149,13 +149,13 @@ function Addproduct() {
         const result = await dispatch(addProducts(productData));
         if (result.status) {
           navigate('/admin');
-          toast.success("Product added successfully!");
+          notify.success("Product added successfully!");
         } else {
-          toast.error("Error while adding product!");
+          notify.error("Error while adding product!");
         }
 
       } catch (error) {
-        toast.error("Failed to upload image!");
+        notify.error("Failed to upload image!");
         console.error("Error uploading image:", error);
       }finally {
         dispatch(stopLoading());

@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import Footer from '../../Components/Footer/footer';
 import Navbar from '../../Components/Navbar/Navbar';
 import { Nodemailer } from '../../Redux/auth/action';
-import { toast } from 'react-toastify';
 import { startLoading, stopLoading } from '../../Redux/products/action';
+import notify from '../../utils/toastNotifications';
 
 
 
@@ -65,13 +65,13 @@ function Contactus() {
         const res = await dispatch(Nodemailer(formData))
         if (res.status) {
           setFormData(initState)
-          toast.success(res.message || 'Mailed Successfully')
+          notify.success(res.message || 'Mailed Successfully')
         } else {
-          toast.error(res.message || 'Error while sending mail')
+          notify.error(res.message || 'Error while sending mail')
         }
 
       } catch (error) {
-        toast.error('An error occurred while sending mail');
+        notify.error('An error occurred while sending mail');
         console.error("Mail sending error:", error);
       } finally {
         dispatch(stopLoading());

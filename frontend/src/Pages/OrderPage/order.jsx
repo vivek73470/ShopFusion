@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteOrderProducts, fetchOrder } from '../../Redux/products/action';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/footer';
-import { toast } from 'react-toastify';
+import notify from '../../utils/toastNotifications';
 
 function Order() {
     const dispatch = useDispatch();
@@ -19,10 +19,10 @@ function Order() {
     const removeOrder = async (id) => {
         const result = await dispatch(deleteOrderProducts(id))
         if (result.status) {
-            toast.success(result.message || 'order cancel successfully');
+            notify.success(result.message || 'order cancel successfully');
 
         } else {
-            toast.error(result.message || 'Error while cancel order');
+            notify.error(result.message || 'Error while cancel order');
         }
     }
 
@@ -32,10 +32,10 @@ function Order() {
             <div className='orderpage-container'>
                 <div className='orderpage-wrapper'>
                     <h2>Your Orders</h2>
-                    {orders.length > 0 ? (
+                    {orders?.length > 0 ? (
                         <div className='order-scroll style-4'>
-                            {orders.length > 0 &&
-                                orders.map((elem, index) => (
+                            {orders?.length > 0 &&
+                                orders?.map((elem, index) => (
                                     <div key={index}>
                                         <div className=''>
                                             <div className='orders-degn-flx '>

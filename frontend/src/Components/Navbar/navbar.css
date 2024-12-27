@@ -11,7 +11,7 @@ a{
     justify-content: space-between;
     align-items: center;
     column-gap: 10px;
-    padding: 20px 60px 20px 95px;
+    padding: 25px 60px 25px 95px;
     background-color: #fff;
     box-shadow: 0px 4.934579372406006px 19.738317489624023px 0px #1f1b2d1f;
 }
@@ -115,7 +115,7 @@ a{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px 80px 5px 80px;
+    padding: 15px 80px 15px 80px;
     background-color: #fff;
     box-shadow: 0px 4.934579372406006px 19.738317489624023px 0px #1f1b2d1f;
 }
@@ -145,16 +145,18 @@ a{
     display: inline-block;
     /* text-decoration: none !important; */
     color: black;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 550;
     cursor: pointer !important;
     transition: transform 0.3s ease, font-size 0.3s ease;
+}
+.navbar-head-homcnt-hamb>span{
+    font-size: 28px;
 }
 .offcanvas-body-wrapper{
     padding: 5px 0px;
 }
 .navbar-head-homcnt-hamb:hover {
-    text-decoration: underline !important;
     transform: scale(0.9) !important;
     color: #db4444;
    
@@ -170,7 +172,7 @@ a{
 
   @media screen and (max-width:1422px){
     .navbar-wrapper {
-        padding: 20px 25px 20px 25px;
+        padding: 25px 25px 25px 25px;
   }
   .header-dsp-hme {
    column-gap: 15px;   
@@ -208,7 +210,7 @@ a{
 
 @media screen and (max-width:550px){
     .navbar-hamburger-wrapper{
-        padding: 5px 30px 5px 30px;
+        padding: 15px 30px 15px 30px;
 }
 .navbar-hamb-offcanvas {
     font-size: 32px;

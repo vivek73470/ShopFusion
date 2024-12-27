@@ -9,11 +9,9 @@ import slider from '../../Assets/Slide.png'
 import { Link } from 'react-router-dom';
 import Footer from '../../Components/Footer/footer'
 import Navbar from '../../Components/Navbar/Navbar';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FaEyeSlash } from "react-icons/fa6";
 import { LuEye } from "react-icons/lu";
-
+import notify from '../../utils/toastNotifications';
 
 
 function Login() {
@@ -63,9 +61,9 @@ function Login() {
                 localStorage.setItem('userId', response._id);
                 setFormData({ email: '', password: '' });
                 navigate('/admin');
-                toast.success("Login Successfully!");
+                notify.success("Login Successfully!");
             } else {
-                toast.error(response.message || "Wrong password or email");
+                notify.error(response.message || "Wrong password or email");
             }
         }
     };

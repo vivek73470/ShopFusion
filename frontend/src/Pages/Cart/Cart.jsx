@@ -6,7 +6,7 @@ import { addOrder, deleteProductCart } from '../../Redux/products/action';
 import Checkout from '../../Components/Checkout/Checkout';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/footer';
-import { toast } from 'react-toastify';
+import notify from '../../utils/toastNotifications';
 
 
 function Cart() {
@@ -16,9 +16,9 @@ function Cart() {
   const removeProduct = async(id) => {
     const result = await dispatch(deleteProductCart(id));
     if(result.status) { 
-       toast.success(result.message || 'Removed successfully');
+      notify.success(result.message || 'Removed successfully');
     } else {
-       toast.error(result.message || 'Error while removing product');
+      notify.error(result.message || 'Error while removing product');
     }
  };
  
@@ -27,17 +27,17 @@ function Cart() {
         for (let i in cart) {
             const responseStatus = await dispatch(addOrder(cart[i]));
             if (responseStatus === 401) {
-              toast.error("Please login first to place an order.");
+              notify.error("Please login first to place an order.");
               return; 
           }
             if (responseStatus === 200) {
-                toast.success(`Order for ${cart[i].title} added successfully!`);
+              notify.success(`Order for ${cart[i].title} added successfully!`);
             } else {
-                toast.error(`Failed to add order for ${cart[i].title}.`);
+              notify.error(`Failed to add order for ${cart[i].title}.`);
             }
         }
     } catch (error) {
-        toast.error("An error occurred during the checkout process.");
+      notify.error("An error occurred during the checkout process.");
     }
 };
 
@@ -47,9 +47,9 @@ function Cart() {
       <Navbar />
       <div className='cart-design-screen'>
         <h2 className='cart-shopping-crt'>Shopping Cart</h2>
-        {cart.length > 0 ? (
+        {cart?.length > 0 ? (
           <div className='cart-headinf style-4'>
-            {cart.map((product) => (
+            {cart?.map((product) => (
               <CartItem
                 key={product._id}
                 _id={product._id}

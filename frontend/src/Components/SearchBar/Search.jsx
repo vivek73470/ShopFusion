@@ -55,8 +55,8 @@ function Search() {
                 </span>
               {showDropdown && query && (
                     <ul className="search-results">
-                        {dropdownResults.length > 0 ? (
-                            dropdownResults.map((product) => (
+                        {dropdownResults?.length > 0 ? (
+                            dropdownResults?.map((product) => (
                                 <div key={product._id} onClick={() => handleSelectProduct(product)}>
                                     <p>{product.filtercategory}</p>
                                 </div>

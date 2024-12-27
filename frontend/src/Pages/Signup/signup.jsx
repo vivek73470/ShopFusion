@@ -9,8 +9,7 @@ import Footer from '../../Components/Footer/footer'
 import Navbar from '../../Components/Navbar/Navbar';
 import { FaEyeSlash } from "react-icons/fa6";
 import { LuEye } from "react-icons/lu";
-import { toast } from 'react-toastify';
-
+import notify from '../../utils/toastNotifications';
 
 function Signup() {
     const navigate = useNavigate();
@@ -61,13 +60,13 @@ function Signup() {
             if (response.status) {
                 setFormData({ username: '', email: '', password: '' })
                 navigate('/login')
-                toast.success("Registered Successfully!");
+                notify.success("Registered Successfully!");
             }
             else {
                 if (response.code === 409) {
-                    toast.error("Email is already registered!");
+                    notify.error("Email is already registered!");
                 } else {
-                    toast.error("Registered failed! Please try again");
+                    notify.error("Registered failed! Please try again");
                 }
 
             }

@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { editProducts, getSingleProduct, startLoading, stopLoading } from '../../Redux/products/action';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { storage } from '../../firebase/firebase.config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import notify from '../../utils/toastNotifications';
 
 function EditProduct() {
     const navigate = useNavigate()
@@ -177,13 +177,13 @@ function EditProduct() {
     
                 if (response.status) {
                     navigate('/admin');
-                    toast.success("Product updated successfully!");
+                    notify.success("Product updated successfully!");
                 } else {
-                    toast.error("Product update failed!");
+                  notify.error("Product update failed!");
                 }
             } catch (e) {
                 console.error(e);
-                toast.error("An error occurred while updating the product.");
+                notify.error("An error occurred while updating the product.");
             }finally {
               dispatch(stopLoading());
             }

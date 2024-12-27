@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import Footer from '../../Components/Footer/footer'
 import Navbar from '../../Components/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify';
+import notify from '../../utils/toastNotifications'
 
 
 
@@ -33,7 +33,7 @@ function Forgot() {
             navigate('/new-password')
         }
         else{
-            toast.error("Email not found.");
+            notify.error("Email not found.");
         }
 
     }

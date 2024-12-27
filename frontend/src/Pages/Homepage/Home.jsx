@@ -24,8 +24,6 @@ import Footer from '../../Components/Footer/footer';
 import { useDispatch } from 'react-redux';
 import { fetchData} from '../../Redux/products/action';
 import Navbar from '../../Components/Navbar/Navbar';
-import { ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 
 function Home() {
@@ -55,7 +53,6 @@ function Home() {
     <>
     <Navbar/>
       <div className='home-container'>
-      <ToastContainer />
         <div className='home-wrapper'>
 
           <div className='home-1st-page'>

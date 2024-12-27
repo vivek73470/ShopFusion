@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux'
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from 'react-redux'
 import { deleteProductCart, fetchCart } from '../../Redux/products/action';
-import { toast } from 'react-toastify';
-
+import notify from '../../utils/toastNotifications';
 
 
 function CartAdmin() {
@@ -16,9 +15,9 @@ function CartAdmin() {
     const removeProduct = async(id) => {
         const result = await dispatch(deleteProductCart(id))
         if(result.status) { 
-            toast.success(result.message || 'Removed successfully');
+            notify.success(result.message || 'Removed successfully');
          } else {
-            toast.error(result.message || 'Error while removing product');
+            notify.error(result.message || 'Error while removing product');
          }
       };
 
@@ -29,10 +28,10 @@ function CartAdmin() {
     return (
         <>
         <div className='cartadmin-container'>
-            <div className='cartadmin-container-ttl'>Total Product in Carts : {cart.length}</div>
+            <div className='cartadmin-container-ttl'>Total Product in Carts : {cart?.length}</div>
             <div className='cart-adminborder'></div>
         <div className='cartadmin-wrapper'>
-            {cart.length > 0 && cart.map((item, index) => (
+            {cart?.length > 0 && cart?.map((item, index) => (
                     <div  key={index} className='ordersaadmin-degn-flx'>
                         <div className='cartitmadmin-bdr-ims'>
                             <img src={item.image} alt="" />

@@ -16,7 +16,7 @@ function CartCounter() {
         <>
             <div className='cart-counter-screen'>
                 <div className='cart-cnt'>
-                    {cart?.length ? cart.length : 0}
+                    {cart?.length ? cart?.length : 0}
                 </div>
 
             </div>

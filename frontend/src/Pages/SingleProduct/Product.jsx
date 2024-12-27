@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { addProductCart, getSingleProduct } from '../../Redux/products/action';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/footer'
-import { toast } from 'react-toastify';
+import notify from '../../utils/toastNotifications';
 
 
 function SingleProduct() {
@@ -25,9 +25,9 @@ function SingleProduct() {
     if (currentProduct) {
       const result = await dispatch(addProductCart(currentProduct));
       if (result.status) {
-        toast.success("Added to cart Successfully!");
+        notify.success("Added to cart Successfully!");
       } else {
-        toast.error(result.message || 'An error occurred');
+        notify.error(result.message || 'An error occurred');
       }
     }
   }

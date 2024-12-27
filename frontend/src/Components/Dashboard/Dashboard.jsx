@@ -6,7 +6,7 @@ import { deleteProducts, fetchData } from '../../Redux/products/action'
 import { useNavigate } from 'react-router-dom'
 import { TiEdit } from "react-icons/ti";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { toast } from 'react-toastify';
+import notify from '../../utils/toastNotifications'
 
 
 function Dashboard() {
@@ -19,12 +19,12 @@ function Dashboard() {
     if (id) {
         const result = await dispatch(deleteProducts(id));
         if (result.status) {
-            toast.success("Deleted Successfully!"); 
+          notify.success("Deleted Successfully!"); 
         } else {
-            toast.error("Error while deleting!"); 
+          notify.error("Error while deleting!"); 
         }
     } else {
-        toast.error("Invalid product ID!"); 
+      notify.error("Invalid product ID!"); 
     }
 };
 
@@ -39,13 +39,13 @@ function Dashboard() {
       <div className='dashboard-screen'>
         <div className='dashboard-wrappeer'>
           <div className='dash-admin-addbtn'>
-            <span>Total Products -{watches.length}</span>
+            <span>Total Products -{watches?.length}</span>
             <button onClick={() => navigate('/admin/add-product')} className='your-events'>Add Products</button>
           </div>
           <div className='break-line '>
           </div>
           <div className='product-listing-dash'>
-            {watches.length > 0 &&
+            {watches?.length > 0 &&
               watches.map((item) => (
                 <div className="productlist-design-dash" key={item.id} >
                   <div class="dropdown">

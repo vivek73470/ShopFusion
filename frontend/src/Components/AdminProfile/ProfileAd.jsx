@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './index.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { UpdateProf, fetchUserData } from '../../Redux/auth/action';
-import { toast } from 'react-toastify';
 import { startLoading, stopLoading } from '../../Redux/products/action';
+import notify from '../../utils/toastNotifications';
 
 function ProfileAd() {
   const dispatch = useDispatch();
@@ -62,12 +62,12 @@ function ProfileAd() {
       dispatch(startLoading())
       const res = await dispatch(UpdateProf(token, data));
       if (res.status) {
-        toast.success("Profile updated successfully!");
+        notify.success("Profile updated successfully!");
       } else {
-        toast.error(res.message || "Failed to update profile.");
+        notify.error(res.message || "Failed to update profile.");
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.");
+      notify.error("An error occurred. Please try again.");
     }finally {
       dispatch(stopLoading());
     }

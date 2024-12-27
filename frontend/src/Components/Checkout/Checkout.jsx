@@ -12,7 +12,7 @@ function Checkout({ cart, checkoutHandler }) {
     return (
         <>
             <div className='checkout-container-parent'>
-                {cart.length > 0 && (
+                {cart?.length > 0 && (
                     <button className='checkout-btn' data-bs-toggle="modal" data-bs-target="#staticBackdrop">Checkout</button>
                 )}
 

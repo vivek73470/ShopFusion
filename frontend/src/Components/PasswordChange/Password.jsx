@@ -10,7 +10,7 @@ import Navbar from '../../Components/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom'
 import { FaEyeSlash } from "react-icons/fa6";
 import { LuEye } from "react-icons/lu";
-import { toast } from 'react-toastify';
+import notify from '../../utils/toastNotifications'
 
 
 function Password() {
@@ -38,9 +38,9 @@ function Password() {
         const response = await dispatch(Changepassword(_id,passId));
         if (response.status) {
             navigate('/login');
-            toast.success("Password changed successfully!");
+            notify.success("Password changed successfully!");
         } else {
-            toast.error(response.message || "Failed to change password.");
+            notify.error(response.message || "Failed to change password.");
         }
     };
     
