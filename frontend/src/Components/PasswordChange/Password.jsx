@@ -23,6 +23,7 @@ function Password() {
     handleSubmit,
     formState: { errors },
   } = useForm({
+    mode: 'onChange',
     defaultValues: { password: '' },
   });
 
@@ -64,7 +65,13 @@ function Password() {
             <div className='padding-cont-required'>
               <div className='hide-show-funct'>
                 <input
-                  {...register('password', { required: 'Password is required' })}
+                  {...register('password', {
+                    required: 'Password is required',
+                    minLength: {
+                      value: 6,
+                      message: 'Password must be at least 6 characters',
+                    }
+                  })}
                   name='password'
                   type={showPassword ? 'text' : 'password'}
                   id='text-pas'

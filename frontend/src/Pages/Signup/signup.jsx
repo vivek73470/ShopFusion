@@ -66,7 +66,7 @@ function Signup() {
                     required: 'username is required',
                     minLength: {
                       value: 4,
-                      message: 'username must be at least 4 characters',
+                      message: 'Username must be at least 4 characters',
                     },
                   })}
                   type='text'

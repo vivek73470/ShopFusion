@@ -19,7 +19,10 @@ function Forgot() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { email: '' } });
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: { email: '' }
+  });
 
   const handleEmailSubmit = async (data) => {
     try {
@@ -52,7 +55,13 @@ function Forgot() {
             <div className='padding-cont-required'>
               <div className='hide-show-funct'>
                 <input
-                  {...register('email', { required: 'Email is required' })}
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: 'Please enter a valid email address',
+                    }
+                  })}
                   name='email'
                   type='email'
                   id='text-pas'
