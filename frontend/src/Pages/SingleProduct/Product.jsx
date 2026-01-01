@@ -36,7 +36,7 @@ function SingleProduct() {
         <div className='single-product-wrapscreen'>
           <div className='prdct-size-mobile'>
             {isFetching ? (
-              <div className='products-loader'>
+              <div className='products-loader-single'>
                 <CircularProgress size={28} />
               </div>
             ) : (

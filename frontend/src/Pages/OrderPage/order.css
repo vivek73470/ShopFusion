@@ -102,6 +102,14 @@
     text-align: center;
 }
 
+.products-loader-order {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
 @media screen and (max-width:697px) {
     .cartitm-bdrord {
         width: -webkit-fill-available

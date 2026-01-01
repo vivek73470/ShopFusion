@@ -64,7 +64,7 @@ const Products = () => {
             </div>
             <div className="product-listing">
               {(isProductsLoading || isFiltering || isSearching) && (
-                <div className="products-loader">
+                <div className="products-loader-main">
                   <CircularProgress size={28} />
                 </div>
               )}

@@ -31,7 +31,7 @@ function Order() {
         <div className='orderpage-wrapper'>
           <h2>Your Orders</h2>
           {isFetching && (
-            <div className='products-loader'>
+            <div className='products-loader-order'>
               <CircularProgress size={24} />
             </div>
           )}

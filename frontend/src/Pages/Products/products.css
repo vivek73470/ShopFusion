@@ -32,6 +32,14 @@
     padding-inline-start: 20px;
 }
 
+.products-loader-main {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
 .productlist-design {
     width: 100%;
     height: max-content;
@@ -215,10 +223,10 @@
     .product-screen {
         margin-top: 60px;
     }
-    
-.product-filter {
-max-height: 350px;
-overflow-y: scroll;
 
-}
+    .product-filter {
+        max-height: 350px;
+        overflow-y: scroll;
+
+    }
 }
