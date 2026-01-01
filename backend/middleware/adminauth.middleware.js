@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+const { verifyToken } = require('../utils/jwt');
 
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
@@ -7,7 +7,7 @@ const authenticate = (req, res, next) => {
         return res.status(401).send("Authentication token is required");
     }
     try {
-        const decoded = jwt.verify(token, 'masai');
+        const decoded = verifyToken(token);
         if (decoded) {
             return next();
         } else {

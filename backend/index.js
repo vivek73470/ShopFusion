@@ -1,10 +1,6 @@
 const express = require('express')
 const Connection = require('./config/db')
-const userRouter = require('./routes/userroute')
-const productsRoute = require('./routes/productsroute')
-const cartRouter = require('./routes/cartroute');
-const orderRouter = require('./routes/order.route')
-const contactRouter = require('./routes/contactroute')
+const routes = require('./routes/index')
 const cors = require('cors');
 require('dotenv').config()
 const app = express();
@@ -16,11 +12,7 @@ app.use(cors({
     origin:"*"
 }))
 
-app.use('/user',userRouter)
-app.use('/products',productsRoute)
-app.use('/cart',cartRouter)
-app.use('/orders',orderRouter)
-app.use('/contact',contactRouter)
+app.use('/', routes)
 
 
 app.listen(PORT, async () => {
