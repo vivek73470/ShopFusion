@@ -79,3 +79,27 @@ align-items: center;
   font-size: 20px;
 }
 }
+
+/* Smooth offcanvas backdrop */
+.offcanvas-backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(3px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.offcanvas-backdrop.show {
+  opacity: 1 !important;
+}
+
+/* Smooth offcanvas slide animation */
+.offcanvas {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.offcanvas.showing {
+  transform: translateX(0);
+}
+
+.hamburger-offcanvas-wid {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}

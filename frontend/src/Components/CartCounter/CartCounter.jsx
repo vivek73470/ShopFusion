@@ -1,27 +1,18 @@
-import React, { useEffect } from 'react'
-import './cartCounter.css'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchCart } from '../../Redux/products/action';
+import React from 'react';
+import './cartCounter.css';
+import { useGetCartQuery } from '../../services/api/cartApi';
 
 function CartCounter() {
-    const cart = useSelector(store => store.ProductReducer.cart)
-    const dispatch = useDispatch();
+  const { data: cartResponse } = useGetCartQuery();
+  const cart = cartResponse?.data || [];
 
-    useEffect(() => {
-        if (cart?.length === 0) {
-            dispatch(fetchCart());
-        }
-    }, [cart?.length, dispatch]);
-    return (
-        <>
-            <div className='cart-counter-screen'>
-                <div className='cart-cnt'>
-                    {cart?.length ? cart?.length : 0}
-                </div>
-
-            </div>
-        </>
-    )
+  return (
+    <>
+      <div className='cart-counter-screen'>
+        <div className='cart-cnt'>{cart?.length ? cart.length : 0}</div>
+      </div>
+    </>
+  );
 }
 
-export default CartCounter
+export default CartCounter;

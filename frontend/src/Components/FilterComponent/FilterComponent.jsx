@@ -1,14 +1,11 @@
 import React from "react";
-import './filter.css'
-import { useDispatch } from "react-redux"
+import "./filter.css";
 import { useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react"
-import { fetchFilterData } from "../../Redux/products/action";
+import { useState, useEffect } from "react";
 
-const Filter = () => {
-  const dispatch = useDispatch();
-  const [searchParams, setSerchparams] = useSearchParams()
-  const [category, setCategory] = useState(searchParams.getAll("category") || [])
+const Filter = ({ onFilterChange }) => {
+  const [searchParams, setSerchparams] = useSearchParams();
+  const [category, setCategory] = useState(searchParams.getAll("category") || []);
   const [brand_namez, setBrandNamez] = useState(searchParams.getAll("brand_namez") || []);
   const [size, setSize] = useState(searchParams.getAll("size") || []);
   const [filtercategory, setfiltercategory] = useState(searchParams.getAll("filtercategory") || []);
@@ -71,9 +68,8 @@ const Filter = () => {
   useEffect(() => {
     const params = { category, brand_namez, size, filtercategory };
     setSerchparams(params);
-
-    dispatch(fetchFilterData({ category, brand_namez, size, filtercategory }));
-  }, [category, brand_namez, size, filtercategory, setSerchparams, dispatch]);
+    onFilterChange?.(params);
+  }, [category, brand_namez, size, filtercategory, setSerchparams, onFilterChange]);
 
 
   return (

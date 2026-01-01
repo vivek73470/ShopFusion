@@ -1,146 +1,116 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import './index.css'
-import { useDispatch, useSelector } from 'react-redux';
-import { UpdateProf, fetchUserData } from '../../Redux/auth/action';
-import { startLoading, stopLoading } from '../../Redux/products/action';
+import { useForm } from 'react-hook-form';
 import notify from '../../utils/toastNotifications';
+import { useGetUserByIdQuery, useUpdateUserMutation } from '../../services/api/userApi';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function ProfileAd() {
-  const dispatch = useDispatch();
-  const profileData = useSelector((store) => store.AuthReducer.userData)
-  const [data, setData] = useState({
-    username: '',
-    gender: '',
-    number: '',
-    address: '',
-    DOB: "",
-
-  })
   const token = localStorage.getItem('userId');
+  const { data: userData, isLoading: isLoadingUser } = useGetUserByIdQuery(token, { skip: !token });
+  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      username: '',
+      gender: '',
+      number: '',
+      address: '',
+      DOB: '',
+    }
+  });
 
   useEffect(() => {
-    if (token) {
-      dispatch(fetchUserData(token));
+    if (userData?.data) {
+      reset({
+        username: userData.data.username || '',
+        gender: userData.data.gender || '',
+        number: userData.data.number || '',
+        address: userData.data.address || '',
+        DOB: userData.data.DOB || '',
+      });
     }
-  }, [dispatch, token]);
+  }, [userData, reset]);
 
-  useEffect(() => {
-    if (profileData) {
-      setData(profileData);
-    }
-  }, [setData, profileData]);
-
-  const handleChange = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value
-    })
-
-  }
-
-  // const handleProfileChange = (e) => {
-  //   const file = e.target.files[0];
-
-  //   if (file) {
-  //     const reader = new FileReader();
-
-  //     reader.onloadend = () => {
-  //       setData({
-  //         ...data,
-  //         [e.target.name]: reader.result
-  //       });
-  //     };
-
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      dispatch(startLoading())
-      const res = await dispatch(UpdateProf(token, data));
+      const res = await updateUser({ id: token, body: data }).unwrap();
       if (res.status) {
         notify.success("Profile updated successfully!");
       } else {
         notify.error(res.message || "Failed to update profile.");
       }
     } catch (error) {
-      notify.error("An error occurred. Please try again.");
-    }finally {
-      dispatch(stopLoading());
+      notify.error(error?.data?.message || "An error occurred. Please try again.");
     }
   };
 
 
+  if (isLoadingUser) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <h2 className='profile-persnl'>Personal Info..</h2>
-      <form className='Profile-Form' onSubmit={handleSubmit}>
+      <form className='Profile-Form' onSubmit={handleSubmit(onSubmit)}>
         <div className='profile-left-frm'>
           <div className='inside-prfle-lftfrm'>
             <input
-              name='username'
+              {...register('username', {
+                required: 'Username is required',
+                minLength: {
+                  value: 4,
+                  message: 'username must be at least 4 characters',
+                }
+              })}
               type='text'
               placeholder='User Name'
-              value={data.username}
-              onChange={handleChange}
             />
+            {errors.username && <span className="error">{errors.username.message}</span>}
             <br />
             <input
-              name='gender'
+              {...register('gender')}
               type='text'
               placeholder='Gender'
-              value={data.gender}
-              onChange={handleChange}
             />
             <br />
             <input
-              name='number'
+              {...register('number', {
+                required: 'Phone number is required',
+                pattern: {
+                  value: /^[0-9]{10}$/,
+                  message: 'Phone number must be exactly 10 digits',
+                },
+              })}
               type='tel'
               placeholder='Phone Number'
-              value={data.number}
-              onChange={handleChange}
             />
+
             <br />
             <input
-              name='DOB'
+              {...register('DOB')}
               type='date'
               placeholder='DOB'
-              value={data.DOB}
-              onChange={handleChange}
             />
             <br />
             <input
-              name='address'
+              {...register('address')}
               type='text'
               placeholder='Address'
-              value={data.address}
-              onChange={handleChange}
             />
             <br />
-            <button type='submit'>Update</button>
+            <button type='submit' disabled={isUpdating}>
+              {isUpdating ? <CircularProgress size={18} /> : 'Update'}
+            </button>
           </div>
-
-          {/* <div className='profilr-pic'>
-           <input
-             name='profilephoto'
-             type="file"
-             placeholder='Add Your Photo'
-             onChange={handleProfileChange}
-           />
-           {data.profilephoto && (
-             < img
-               src={data.profilephoto}
-               alt='Profile Photo'
-             />
-           )}
-         </div> */}
-
         </div>
-
-
       </form>
     </>
   )

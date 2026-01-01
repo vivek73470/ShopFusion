@@ -1,153 +1,95 @@
-import React from 'react'
-import './contact.css'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import './contact.css';
 import Footer from '../../Components/Footer/footer';
 import Navbar from '../../Components/Navbar/Navbar';
-import { Nodemailer } from '../../Redux/auth/action';
-import { startLoading, stopLoading } from '../../Redux/products/action';
 import notify from '../../utils/toastNotifications';
-
-
+import { useSendContactMutation } from '../../services/api/contactApi';
+import { useForm } from 'react-hook-form';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Contactus() {
-  const dispatch = useDispatch();
-  const initState = {
-    name: "",
-    email: "",
-    phone: "",
-    message: ""
-  }
-  const [formData, setFormData] = useState(initState);
-  const [errors, setErrors] = useState({ name: '', email: '', phone: '', message: '' });
+  const [sendContact, { isLoading }] = useSendContactMutation();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: { name: '', email: '', phone: '', message: '' },
+  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevformData) => ({
-      ...prevformData,
-      [name]: value
-
-    }));
-    setErrors({
-      ...errors,
-      [e.target.name]: ''
-    })
-  }
-
-  const validateForm = () => {
-    let valid = true;
-    const newErrors = {};
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-      valid = false;
-    }
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-      valid = false;
-    }
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-      valid = false;
-    }
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
-      valid = false;
-    }
-    setErrors(newErrors);
-    return valid;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      try {
-        dispatch(startLoading());
-        const res = await dispatch(Nodemailer(formData))
-        if (res.status) {
-          setFormData(initState)
-          notify.success(res.message || 'Mailed Successfully')
-        } else {
-          notify.error(res.message || 'Error while sending mail')
-        }
-
-      } catch (error) {
-        notify.error('An error occurred while sending mail');
-        console.error("Mail sending error:", error);
-      } finally {
-        dispatch(stopLoading());
+  const handleSubmitForm = async (formData) => {
+    try {
+      const res = await sendContact(formData).unwrap();
+      if (res.status || res.message) {
+        reset();
+        notify.success(res.message || 'Mailed Successfully');
+      } else {
+        notify.error(res.message || 'Error while sending mail');
       }
+    } catch (error) {
+      notify.error(error?.data?.message || 'An error occurred while sending mail');
     }
-
-  }
+  };
   return (
     <>
-
       <Navbar />
 
       <div className='contact-screen'>
-        <span className='contact-getin'><h2>Get in Touch with us</h2></span>
-        <div className="contact-form">
+        <span className='contact-getin'>
+          <h2>Get in Touch with us</h2>
+        </span>
+        <div className='contact-form'>
           <h4 className='contact-drop'>Drop us a message</h4>
-          <form className='contact-frmm' onSubmit={handleSubmit}>
-            <div className="form-group">
+          <form className='contact-frmm' onSubmit={handleSubmit(handleSubmitForm)}>
+            <div className='form-group'>
               <input
-                name="name"
-                type="text"
-                id="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleChange}
-
+                {...register('name', { required: 'Name is required' })}
+                name='name'
+                type='text'
+                id='name'
+                placeholder='Your Name'
               />
-              {errors.name && <span className="error">{errors.name}</span>}
+              {errors.name && <span className='error'>{errors.name.message}</span>}
             </div>
-            <div className="form-group">
-
+            <div className='form-group'>
               <input
-                name="email"
-                type="email"
-                id="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-
+                {...register('email', { required: 'Email is required' })}
+                name='email'
+                type='email'
+                id='email'
+                placeholder='Your Email'
               />
-              {errors.email && <span className="error">{errors.email}</span>}
+              {errors.email && <span className='error'>{errors.email.message}</span>}
             </div>
-            <div className="form-group">
-
+            <div className='form-group'>
               <input
-                name="phone"
-                type="tel"
-                id="phone"
-                placeholder="Your Phone Number"
-                value={formData.phone}
-                onChange={handleChange}
-
+                {...register('phone', { required: 'Phone number is required' })}
+                name='phone'
+                type='tel'
+                id='phone'
+                placeholder='Your Phone Number'
               />
-              {errors.phone && <span className="error">{errors.phone}</span>}
+              {errors.phone && <span className='error'>{errors.phone.message}</span>}
             </div>
-            <div className="form-group">
-
+            <div className='form-group'>
               <textarea
-                name="message"
-                id="message"
-                placeholder="Your Message"
-                value={formData.message}
-                onChange={handleChange}
-
-              >
-              </textarea>
-              {errors.message && <span className="error">{errors.message}</span>}
+                {...register('message', { required: 'Message is required' })}
+                name='message'
+                id='message'
+                placeholder='Your Message'
+              ></textarea>
+              {errors.message && <span className='error'>{errors.message.message}</span>}
             </div>
-            <input type="submit" className='contact-bnt' value="Submit" />
+            <button type='submit' className='contact-bnt' disabled={isLoading}>
+              {isLoading ? <CircularProgress size={18} /> : 'Submit'}
+            </button>
           </form>
         </div>
-
       </div>
       <Footer />
     </>
-  )
+  );
 }
 
-export default Contactus
+export default Contactus;

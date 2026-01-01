@@ -18,21 +18,15 @@ import Popular from '../Popular/Popular';
 import CategoryToBag from '../CategoryToBag/categoryToBag';
 import StupidCollection from '../StupidCollection/StupidCollection';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import '../../Components/Footer/footer'
 import Footer from '../../Components/Footer/footer';
-import { useDispatch } from 'react-redux';
-import { fetchData} from '../../Redux/products/action';
+import { useGetProductsQuery } from '../../services/api/productApi';
 import Navbar from '../../Components/Navbar/Navbar';
 
 
 function Home() {
-  const dispatch = useDispatch()
-  const seller = useSelector((store) => store.ProductReducer.products?.slice(0, 6))
-
-  useEffect(() => {
-    dispatch(fetchData()); 
-  }, [dispatch]);
+  const { data: productsData } = useGetProductsQuery();
+  const seller = productsData?.data?.slice(0, 6) || [];
 
 
   // Remaining component code...

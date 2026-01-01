@@ -1,29 +1,27 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './cartAdmin.css'
-import { useSelector } from 'react-redux'
 import { MdDelete } from "react-icons/md";
-import { useDispatch } from 'react-redux'
-import { deleteProductCart, fetchCart } from '../../Redux/products/action';
+import { useGetCartQuery, useRemoveFromCartMutation } from '../../services/api/cartApi';
 import notify from '../../utils/toastNotifications';
 
 
 function CartAdmin() {
-    const dispatch = useDispatch();
-    const cart = useSelector((store) => store.ProductReducer.cart)
-
+    const { data: cartData, isLoading } = useGetCartQuery();
+    const [removeFromCart] = useRemoveFromCartMutation();
+    const cart = cartData?.data || [];
 
     const removeProduct = async(id) => {
-        const result = await dispatch(deleteProductCart(id))
-        if(result.status) { 
-            notify.success(result.message || 'Removed successfully');
-         } else {
-            notify.error(result.message || 'Error while removing product');
-         }
-      };
-
-    useEffect(() => {
-        dispatch(fetchCart());
-    }, [dispatch])
+        try {
+            const result = await removeFromCart(id).unwrap();
+            if(result.status) { 
+                notify.success(result.message || 'Removed successfully');
+            } else {
+                notify.error(result.message || 'Error while removing product');
+            }
+        } catch (error) {
+            notify.error(error?.data?.message || 'Error while removing product');
+        }
+    };
 
     return (
         <>

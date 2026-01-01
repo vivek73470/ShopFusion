@@ -1,29 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './index.css'
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { fetchUserData } from '../../Redux/auth/action';
+import { useGetUserByIdQuery } from '../../services/api/userApi';
 import { FaBars } from "react-icons/fa";
-import { TbLogout } from "react-icons/tb";
-import { CgProfile } from "react-icons/cg";
-import { IoMdCart } from "react-icons/io";
-import { MdOutlineDashboard, MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { ADMIN_HEADER_MENU_ITEMS, ADMIN_LOGOUT_ICON } from '../../constants/adminHeaderMenu';
 
 function AdminHeader() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const userDetails = useSelector((store) => store.AuthReducer.userData)
   const userId = localStorage.getItem('userId')
-
-
-
-
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserData(userId));
-    }
-  }, [dispatch, userId]);
+  const { data: userData } = useGetUserByIdQuery(userId, { skip: !userId });
+  const userDetails = userData?.data;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -57,30 +43,22 @@ function AdminHeader() {
         <div class="offcanvas-body">
           <div class="adminoffcanvas-body-wrapper">
             <div className='admin-offcanvas-body-homecnt'>
-              <span className='admin-offcanvas-body-linkk' onClick={() => handleNavigation('/admin/dashboard')} data-bs-dismiss="offcanvas">
-                <MdOutlineDashboard />
-                <span className='admin-navbar-head-homcnt-hamb'>Dashboard</span>
-              </span>
-              <span className='admin-offcanvas-body-linkk' to='/admin/add-product' onClick={() => handleNavigation('/admin/add-product')} data-bs-dismiss="offcanvas">
-                <MdOutlineProductionQuantityLimits />
-                <span className='admin-navbar-head-homcnt-hamb'>Add Products</span>
-              </span>
-
-              <span className='admin-offcanvas-body-linkk' to='/admin/cart-admin' onClick={() => handleNavigation('/admin/cart-admin')} data-bs-dismiss="offcanvas">
-                <IoMdCart />
-                <span className='admin-navbar-head-homcnt-hamb'>Cart</span>
-              </span>
-
-              <span className='admin-offcanvas-body-linkk' to='/admin/profile' onClick={() => handleNavigation('/admin/profile')} data-bs-dismiss="offcanvas">
-                <CgProfile />
-                <span className='admin-navbar-head-homcnt-hamb'>Profile</span>
-              </span>
+              {ADMIN_HEADER_MENU_ITEMS.map((item) => (
+                <span 
+                  key={item.path}
+                  className='admin-offcanvas-body-linkk' 
+                  onClick={() => handleNavigation(item.path)} 
+                  data-bs-dismiss="offcanvas"
+                >
+                  {item.icon}
+                  <span className='admin-navbar-head-homcnt-hamb'>{item.title}</span>
+                </span>
+              ))}
             </div>
 
             <div className='admin-offcanvas-logout' onClick={() => handleLogout()} data-bs-dismiss="offcanvas">
-              <TbLogout />
+              {ADMIN_LOGOUT_ICON}
               <span className='admin-navbar-head-homcnt-hamb'>  Logout</span>
-
             </div>
           </div>
 

@@ -1,8 +1,6 @@
-import React, { useEffect} from 'react'
+import React from 'react'
 import './dashboard.css'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import { deleteProducts, fetchData } from '../../Redux/products/action'
+import { useGetProductsQuery, useDeleteProductMutation } from '../../services/api/productApi'
 import { useNavigate } from 'react-router-dom'
 import { TiEdit } from "react-icons/ti";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -11,28 +9,26 @@ import notify from '../../utils/toastNotifications'
 
 function Dashboard() {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const watches = useSelector((store) => store.ProductReducer.products)
-
+  const { data: productsData } = useGetProductsQuery();
+  const [deleteProductMutation] = useDeleteProductMutation();
+  const watches = productsData?.data || [];
 
   const deleteProduct = async (id) => {
     if (id) {
-        const result = await dispatch(deleteProducts(id));
-        if (result.status) {
-          notify.success("Deleted Successfully!"); 
-        } else {
-          notify.error("Error while deleting!"); 
+        try {
+            const result = await deleteProductMutation(id).unwrap();
+            if (result.status) {
+              notify.success("Deleted Successfully!"); 
+            } else {
+              notify.error("Error while deleting!"); 
+            }
+        } catch (error) {
+            notify.error(error?.data?.message || "Error while deleting!");
         }
     } else {
       notify.error("Invalid product ID!"); 
     }
 };
-
-
-
-  useEffect(() => {
-    dispatch(fetchData())
-  }, [dispatch])
 
   return (
     <>

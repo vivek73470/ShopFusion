@@ -1,10 +1,27 @@
 
-import { legacy_createStore, applyMiddleware,combineReducers } from "redux";
-import {thunk} from "redux-thunk";
-import { reducer as ProductReducer } from './products/reducer';
-import {reducer as AuthReducer} from './auth/reducer'
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './slices/authSlice';
+import { productApi } from '../services/api/productApi';
+import { cartApi } from '../services/api/cartApi';
+import { orderApi } from '../services/api/orderApi';
+import { contactApi } from '../services/api/contactApi';
+import { userApi } from '../services/api/userApi';
 
-const rootReducer = combineReducers({ProductReducer,AuthReducer})
-
-// Use createStore with applyMiddleware
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    [productApi.reducerPath]: productApi.reducer,
+    [cartApi.reducerPath]: cartApi.reducer,
+    [orderApi.reducerPath]: orderApi.reducer,
+    [contactApi.reducerPath]: contactApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      productApi.middleware,
+      cartApi.middleware,
+      orderApi.middleware,
+      contactApi.middleware,
+      userApi.middleware
+    ),
+});
