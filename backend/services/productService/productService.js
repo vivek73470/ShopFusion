@@ -49,8 +49,9 @@ const filterProducts = async (filters) => {
     if (filters.size) {
         filterArray.push({ size: { $in: Array.isArray(filters.size) ? filters.size : [filters.size] } });
     }
+    const query = filterArray.length ? { $and: filterArray } : {};
 
-    const query = filterArray.length ? { $or: filterArray } : {};
+    // const query = filterArray.length ? { $or: filterArray } : {};
     return await AllProduct.find(query);
 };
 
@@ -59,11 +60,15 @@ const filterProducts = async (filters) => {
 const searchProducts = async (keyword) => {
     const searchQuery = {
         $or: [
-            { filtercategory: { $regex: keyword, $options: 'i' } },
+            { title: { $regex: keyword, $options: 'i' } },
+            { brand_namez: { $regex: keyword, $options: 'i' } },
+            { category: { $regex: keyword, $options: 'i' } }
         ]
     };
+
     return await AllProduct.find(searchQuery);
 };
+
 
 
 module.exports = {
