@@ -4,7 +4,7 @@ import "./filter.css";
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const Filter = ({ onFilterChange }) => {
+const Filter = ({ setController }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [filters, setFilters] = useState({
@@ -23,11 +23,23 @@ const Filter = ({ onFilterChange }) => {
       return { ...prev, [key]: updated };
     });
   };
-
   useEffect(() => {
-    setSearchParams(filters);
-    onFilterChange(filters);
-  }, [filters, setSearchParams, onFilterChange]);
+    setSearchParams((prev) => {
+      const params = Object.fromEntries(prev.entries());
+      delete params.search; // remove search when filters applied
+      return { ...params, ...filters };
+    });
+
+    setController((prev) => ({
+      ...prev,
+      search: "",
+      ...filters,
+      offset: 0,
+    }));
+
+  }, [filters]);
+
+
 
   const renderCheckbox = (key, value, label = value) => (
     <div className="filter-pdng">

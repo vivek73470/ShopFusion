@@ -7,31 +7,17 @@ export const productApi = createApi({
   tagTypes: ['Products'],
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: () => '/products',
+      query: (params) => ({
+        url: '/products',
+        params,
+      }),
+      refetchOnMountOrArgChange: true,
       providesTags: ['Products']
     }),
     getProductById: builder.query({
       query: (id) => `/products/${id}`,
       // providesTags: ['Products']
 
-    }),
-    searchProducts: builder.query({
-      query: (keyword) => `/products/search-products?keyword=${encodeURIComponent(keyword)}`,
-      providesTags: ['Products'],
-    }),
-    filterProducts: builder.query({
-      query: (filters) => {
-        const params = new URLSearchParams();
-        ['category', 'brand_namez', 'filtercategory', 'size'].forEach((key) => {
-          if (filters?.[key]) {
-            const values = Array.isArray(filters[key]) ? filters[key] : [filters[key]];
-            values.forEach((value) => params.append(key, value));
-          }
-        });
-        const queryString = params.toString();
-        return `/products/filter-products${queryString ? `?${queryString}` : ''}`;
-      },
-      providesTags: ['Products'],
     }),
     addProduct: builder.mutation({
       query: (body) => ({
@@ -62,10 +48,6 @@ export const productApi = createApi({
 export const {
   useGetProductsQuery,
   useGetProductByIdQuery,
-  useSearchProductsQuery,
-  useLazySearchProductsQuery,
-  useFilterProductsQuery,
-  useLazyFilterProductsQuery,
   useAddProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,

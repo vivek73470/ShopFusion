@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./products.css";
 import { Filter } from "../../Components/FilterComponent/FilterComponent";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -6,52 +6,50 @@ import Footer from "../../Components/Footer/footer";
 import Navbar from "../../Components/Navbar/Navbar";
 import {
   useGetProductsQuery,
-  useLazyFilterProductsQuery,
-  useLazySearchProductsQuery,
 } from "../../services/api/productApi";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Products = () => {
   const navigate = useNavigate();
-  const { data: productsResponse, isLoading: isProductsLoading } = useGetProductsQuery();
-  const [triggerFilter, { data: filteredResponse, isFetching: isFiltering }] =
-    useLazyFilterProductsQuery();
-  const [triggerSearch, { data: searchResponse, isFetching: isSearching }] =
-    useLazySearchProductsQuery();
-  const [filters, setFilters] = useState({
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
+  const [controller, setController] = useState({
+    search: "",
     category: [],
     brand_namez: [],
     size: [],
     filtercategory: [],
+    offset: 0,
+    limit: 20,
   });
-  const [searchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword") || "";
-
-  const hasFilters = useMemo(
-    () =>
-      Object.values(filters).some(
-        (value) => Array.isArray(value) && value.length > 0
-      ),
-    [filters]
-  );
 
   useEffect(() => {
-    if (hasFilters) {
-      triggerFilter(filters);
-    } else if (keyword) {
-      triggerSearch(keyword);
-    }
-  }, [filters, hasFilters, keyword, triggerFilter, triggerSearch]);
+    setController({
+      search: search,
+      category: [],
+      brand_namez: [],
+      size: [],
+      filtercategory: [],
+      offset: 0,
+      limit: 20,
+    });
+  }, [search]);
 
-  const products = useMemo(() => {
-    if (hasFilters) {
-      return filteredResponse?.data || [];
-    }
-    if (keyword) {
-      return searchResponse?.data || [];
-    }
-    return productsResponse?.data || [];
-  }, [filteredResponse?.data, hasFilters, keyword, productsResponse?.data, searchResponse?.data]);
+  const { data, isFetching } = useGetProductsQuery({
+    limit: controller.limit,
+    offset: controller.offset,
+
+    ...(controller.search && { search: controller.search }),
+    ...(controller.category?.length && { category: controller.category }),
+    ...(controller.brand_namez?.length && { brand_namez: controller.brand_namez }),
+    ...(controller.size?.length && { size: controller.size }),
+    ...(controller.filtercategory?.length && {
+      filtercategory: controller.filtercategory,
+    }),
+  },
+  )
+
+  const products = data?.data || [];
 
   return (
     <>
@@ -60,17 +58,20 @@ const Products = () => {
         <div className="product-screen-wrapper">
           <div className="product-screen-wrapper1st">
             <div className="product-filter">
-              <Filter onFilterChange={setFilters} />
+              <Filter setController={setController}  />
             </div>
             <div className="product-listing">
-              {(isProductsLoading || isFiltering || isSearching) && (
+              {isFetching && (
                 <div className="products-loader-main">
                   <CircularProgress size={28} />
                 </div>
               )}
-              {!isProductsLoading &&
-                !isFiltering &&
-                !isSearching &&
+
+              {!isFetching && products.length === 0 && (
+                <p>No data found for your search</p>
+              )}
+
+              {!isFetching &&
                 products?.map((item) => (
                   <div className="productlist-design" key={item._id}>
                     <img
