@@ -4,25 +4,20 @@ import { baseQueryWithHeaders } from './baseApi';
 export const productApi = createApi({
   reducerPath: 'productApi',
   baseQuery: baseQueryWithHeaders,
-  tagTypes: ['Products', 'Product'],
+  tagTypes: ['Products'],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: () => '/products',
-      providesTags: (result) =>
-        result?.data
-          ? [
-              ...result.data.map(({ _id }) => ({ type: 'Product', id: _id })),
-              { type: 'Products', id: 'LIST' },
-            ]
-          : [{ type: 'Products', id: 'LIST' }],
+      providesTags: ['Products']
     }),
     getProductById: builder.query({
       query: (id) => `/products/${id}`,
-      providesTags: (_, __, id) => [{ type: 'Product', id }],
+      // providesTags: ['Products']
+
     }),
     searchProducts: builder.query({
       query: (keyword) => `/products/search-products?keyword=${encodeURIComponent(keyword)}`,
-      providesTags: [{ type: 'Products', id: 'LIST' }],
+      providesTags: ['Products'],
     }),
     filterProducts: builder.query({
       query: (filters) => {
@@ -36,7 +31,7 @@ export const productApi = createApi({
         const queryString = params.toString();
         return `/products/filter-products${queryString ? `?${queryString}` : ''}`;
       },
-      providesTags: [{ type: 'Products', id: 'LIST' }],
+      providesTags: ['Products'],
     }),
     addProduct: builder.mutation({
       query: (body) => ({
@@ -44,7 +39,7 @@ export const productApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{ type: 'Products', id: 'LIST' }],
+      invalidatesTags: ['Products'],
     }),
     updateProduct: builder.mutation({
       query: ({ id, body }) => ({
@@ -52,20 +47,14 @@ export const productApi = createApi({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: (_, __, { id }) => [
-        { type: 'Product', id },
-        { type: 'Products', id: 'LIST' },
-      ],
+      invalidatesTags: ['Products']
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({
         url: `/products/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (_, __, id) => [
-        { type: 'Product', id },
-        { type: 'Products', id: 'LIST' },
-      ],
+      invalidatesTags: ['Products'],
     }),
   }),
 });

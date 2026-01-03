@@ -8,7 +8,7 @@ export const orderApi = createApi({
   endpoints: (builder) => ({
     getOrders: builder.query({
       query: () => '/orders',
-      providesTags: [{ type: 'Orders', id: 'LIST' }],
+      providesTags: ['Orders'],
     }),
     addOrder: builder.mutation({
       query: (body) => ({
@@ -16,14 +16,14 @@ export const orderApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{ type: 'Orders', id: 'LIST' }],
+      invalidatesTags: ['Orders'],
     }),
     deleteOrder: builder.mutation({
       query: (id) => ({
         url: `/orders/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [{ type: 'Orders', id: 'LIST' }],
+      invalidatesTags: ['Orders'],
     }),
   }),
 });
