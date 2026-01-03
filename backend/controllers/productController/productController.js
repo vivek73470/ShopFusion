@@ -4,11 +4,21 @@ const productService = require('../../services/productService/productService');
 //  Get all products
 const getAllProducts = async (req, res) => {
     try {
-        const data = await productService.getAllProducts();
+        const { search, category, brand_namez, size, filtercategory, offset = 0, limit = 20 } = req.query;
+        const {data,total} = await productService.getAllProducts({
+            search,
+            category,
+            brand_namez,
+            size,
+            filtercategory,
+            offset: Number(offset),
+            limit: Number(limit),
+        });
         return res.status(200).json({
             status: true,
             message: "Got all products successfully",
-            data: data
+            data,
+            total
         });
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -26,9 +36,9 @@ const getProductById = async (req, res) => {
     try {
         const detailProduct = await productService.getProductById(id);
         if (!detailProduct) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 status: false,
-                message: "Product not found" 
+                message: "Product not found"
             });
         }
         return res.status(200).json({
@@ -38,57 +48,9 @@ const getProductById = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching product:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
             status: false,
-            message: "Internal server error while fetching product" 
-        });
-    }
-};
-
-
-//  Filter products
-const filterProducts = async (req, res) => {
-    try {
-        const { category, brand_namez, filtercategory, size } = req.query;
-        const filters = { category, brand_namez, filtercategory, size };
-        
-        const products = await productService.filterProducts(filters);
-        return res.status(200).json({ 
-            status: true, 
-            data: products 
-        });
-    } catch (error) {
-        console.error('Error filtering products:', error);
-        return res.status(500).json({ 
-            status: false, 
-            message: error.message 
-        });
-    }
-};
-
-
-//  Search products
-const searchProducts = async (req, res) => {
-    try {
-        const { keyword } = req.query;
-
-        if (!keyword) {
-            return res.status(400).json({ 
-                status: false, 
-                message: 'Keyword is required for search.' 
-            });
-        }
-
-        const products = await productService.searchProducts(keyword);
-        return res.status(200).json({ 
-            status: true, 
-            data: products 
-        });
-    } catch (error) {
-        console.error('Error searching products:', error);
-        return res.status(500).json({ 
-            status: false, 
-            message: error.message 
+            message: "Internal server error while fetching product"
         });
     }
 };
@@ -99,10 +61,10 @@ const createProduct = async (req, res) => {
     const { title, price, description, category, plp, brand_namez, discountedPriceText, actualPriceText,
         discount_price_box, image, size, filtercategory } = req.body;
     try {
-        const productData = { 
-            title, price, description, category, plp, brand_namez, 
-            discountedPriceText, actualPriceText, discount_price_box, 
-            image, size, filtercategory 
+        const productData = {
+            title, price, description, category, plp, brand_namez,
+            discountedPriceText, actualPriceText, discount_price_box,
+            image, size, filtercategory
         };
         const dataAdd = await productService.createProduct(productData);
         return res.status(201).json({
@@ -139,9 +101,9 @@ const updateProduct = async (req, res) => {
         });
     } catch (error) {
         console.error('Error updating product:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
             status: false,
-            message: "Error while updating product" 
+            message: "Error while updating product"
         });
     }
 };
@@ -164,9 +126,9 @@ const deleteProduct = async (req, res) => {
         });
     } catch (error) {
         console.error('Error deleting product:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
             status: false,
-            message: "Error while deleting product" 
+            message: "Error while deleting product"
         });
     }
 };
@@ -174,8 +136,6 @@ const deleteProduct = async (req, res) => {
 module.exports = {
     getAllProducts,
     getProductById,
-    filterProducts,
-    searchProducts,
     createProduct,
     updateProduct,
     deleteProduct

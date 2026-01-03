@@ -3,12 +3,6 @@ const productController = require('../controllers/productController/productContr
 
 const productsRoute = express.Router();
 
-// Filter products
-productsRoute.get('/filter-products', productController.filterProducts);
-
-// Search products
-productsRoute.get('/search-products', productController.searchProducts);
-
 // Get all products
 productsRoute.get('/', productController.getAllProducts);
 

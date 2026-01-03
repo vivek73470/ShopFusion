@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 
 const ProductSchema = new mongoose.Schema({
-    title: { type: String, required: true }, 
-    price: { type: Number, required: true }, 
-    description: { type: String, default: null }, 
+    title: { type: String, required: true },
+    price: { type: Number, required: true },
+    description: { type: String, default: null },
     category: { type: String, required: true },
     plp: { type: String, default: null },
-    brand_namez: { type: String, default: null }, 
+    brand_namez: { type: String, default: null },
     discountedPriceText: { type: Number, default: null },
     actualPriceText: { type: Number, required: true },
     discount_price_box: { type: Number, default: null },
@@ -15,9 +15,12 @@ const ProductSchema = new mongoose.Schema({
     filtercategory: { type: String, default: null },
     size: { type: String, default: null },
 
-},{versionKey:false})
+}, {
+    timestamps: true,
+    versionKey: false
+})
 
-const AllProduct = mongoose.model("products",ProductSchema)
+const AllProduct = mongoose.model("products", ProductSchema)
 
 module.exports = AllProduct;
-      
+
