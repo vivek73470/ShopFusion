@@ -4,7 +4,7 @@ const productService = require('../../services/productService/productService');
 //  Get all products
 const getAllProducts = async (req, res) => {
     try {
-        const { search, category, brand_namez, size, filtercategory, offset = 0, limit = 20 } = req.query;
+        const { search, category, brand_namez, size, filtercategory, offset = 0, limit = 12 } = req.query;
         const {data,total} = await productService.getAllProducts({
             search,
             category,

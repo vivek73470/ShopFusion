@@ -74,48 +74,6 @@ const deleteProduct = async (id) => {
 };
 
 
-//  Filter products based on query parameters
-// const filterProducts = async (filters) => {
-//     const filterArray = [];
-
-//     if (filters.category?.length) {
-//         filterArray.push({ category: { $in: filters.category } });
-//     }
-
-//     if (filters.brand_namez?.length) {
-//         filterArray.push({ brand_namez: { $in: filters.brand_namez } });
-//     }
-
-//     if (filters.filtercategory?.length) {
-//         filterArray.push({ filtercategory: { $in: filters.filtercategory } });
-//     }
-
-//     if (filters.size?.length) {
-//         filterArray.push({ size: { $in: filters.size } });
-//     }
-
-//     const query = filterArray.length ? { $and: filterArray } : {};
-//     return await AllProduct.find(query);
-// };
-
-
-
-//  Search products by keyword
-// const searchProducts = async (keyword) => {
-//     const searchQuery = {
-//         $or: [
-//             { title: { $regex: keyword, $options: 'i' } },
-//             { category: { $regex: keyword, $options: 'i' } },
-//             { brand_namez: { $regex: keyword, $options: 'i' } },
-//             { filtercategory: { $regex: keyword, $options: 'i' } },
-//             { size: { $regex: keyword, $options: 'i' } },
-//         ]
-//     };
-
-//     return await AllProduct.find(searchQuery);
-// };
-
-
 
 module.exports = {
     getAllProducts,
@@ -123,8 +81,6 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
-    // filterProducts,
-    // searchProducts
 };
 
 
