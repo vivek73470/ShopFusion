@@ -1,25 +1,52 @@
 
-import React, {useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./search.css";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 function Search() {
   const navigate = useNavigate();
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
+   const debounceTimeout = React.useRef(null);
 
   const handleFocus = () => {
     navigate("/products", { replace: true });
   };
 
-  const handleSearch = (value) => {
-    if (value.trim()) {
-      setSearchParams({ search: value });
-    } else {
-      setSearchParams({});
+  useEffect(() => {
+    const hasFilters =
+      searchParams.getAll("category")?.length ||
+      searchParams.getAll("brand_namez")?.length ||
+      searchParams.getAll("size")?.length ||
+      searchParams.getAll("filtercategory")?.length;
+
+    if (hasFilters) {
+      setQuery("");
     }
+  }, [searchParams]);
+
+  const handleSearch = (value) => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      if (value.trim()) {
+        setSearchParams({ search: value });
+      } else {
+        setSearchParams({});
+      }
+    }, 500);
   };
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="your-events-searchstyle">

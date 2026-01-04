@@ -8,48 +8,35 @@ import {
   useGetProductsQuery,
 } from "../../services/api/productApi";
 import CircularProgress from "@mui/material/CircularProgress";
+import Pagination from "../../Components/Pagination/Pagination";
+
+const LIMIT = 12;
 
 const Products = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const search = searchParams.get("search") || "";
-  const [controller, setController] = useState({
-    search: "",
-    category: [],
-    brand_namez: [],
-    size: [],
-    filtercategory: [],
-    offset: 0,
-    limit: 20,
-  });
+  const [page, setPage] = useState(1);
 
+  // reset page when search or filters change
   useEffect(() => {
-    setController({
-      search: search,
-      category: [],
-      brand_namez: [],
-      size: [],
-      filtercategory: [],
-      offset: 0,
-      limit: 20,
-    });
-  }, [search]);
+    setPage(1);
+  }, [searchParams.toString()]);
 
-  const { data, isFetching } = useGetProductsQuery({
-    limit: controller.limit,
-    offset: controller.offset,
+  const offset = (page - 1) * LIMIT;
+  const queryParams = React.useMemo(() => ({
+    limit: LIMIT,
+    offset,
+    ...(searchParams.get("search") && { search: searchParams.get("search") }),
+    ...(searchParams.getAll("category").length && { category: searchParams.getAll("category") }),
+    ...(searchParams.getAll("brand_namez").length && { brand_namez: searchParams.getAll("brand_namez") }),
+    ...(searchParams.getAll("size").length && { size: searchParams.getAll("size") }),
+    ...(searchParams.getAll("filtercategory").length && { filtercategory: searchParams.getAll("filtercategory") }),
+  }), [searchParams, offset]);
 
-    ...(controller.search && { search: controller.search }),
-    ...(controller.category?.length && { category: controller.category }),
-    ...(controller.brand_namez?.length && { brand_namez: controller.brand_namez }),
-    ...(controller.size?.length && { size: controller.size }),
-    ...(controller.filtercategory?.length && {
-      filtercategory: controller.filtercategory,
-    }),
-  },
-  )
+  const { data, isFetching } = useGetProductsQuery(queryParams);
 
   const products = data?.data || [];
+  const total = data?.total || 0;
 
   return (
     <>
@@ -58,7 +45,7 @@ const Products = () => {
         <div className="product-screen-wrapper">
           <div className="product-screen-wrapper1st">
             <div className="product-filter">
-              <Filter setController={setController}  />
+              <Filter />
             </div>
             <div className="product-listing">
               {isFetching && (
@@ -102,8 +89,17 @@ const Products = () => {
                 ))}
             </div>
           </div>
+
         </div>
       </div>
+      {!isFetching && (
+        <Pagination
+          total={total}
+          limit={LIMIT}
+          page={page}
+          onPageChange={setPage}
+        />
+      )}
       <Footer />
     </>
   );

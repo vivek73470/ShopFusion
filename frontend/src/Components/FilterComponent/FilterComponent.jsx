@@ -4,15 +4,44 @@ import "./filter.css";
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const Filter = ({ setController }) => {
+const Filter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const [filters, setFilters] = useState({
     category: searchParams.getAll("category"),
     brand_namez: searchParams.getAll("brand_namez"),
     size: searchParams.getAll("size"),
     filtercategory: searchParams.getAll("filtercategory"),
   });
+
+  useEffect(() => {
+    const search = searchParams.get("search");
+    if (search) {
+      setFilters({
+        category: [],
+        brand_namez: [],
+        size: [],
+        filtercategory: [],
+      });
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const params = {};
+
+    if (filters.category.length) params.category = filters.category;
+    if (filters.brand_namez.length) params.brand_namez = filters.brand_namez;
+    if (filters.size.length) params.size = filters.size;
+    if (filters.filtercategory.length)
+      params.filtercategory = filters.filtercategory;
+
+    // Only update if there are actual filter changes
+    const hasFilters = Object.keys(params).length > 0;
+    const currentSearch = searchParams.get("search");
+
+    if (hasFilters || !currentSearch) {
+      setSearchParams(params);
+    }
+  }, [filters, searchParams]);
 
   const handleCheckboxChange = (key, value, checked) => {
     setFilters((prev) => {
@@ -23,23 +52,6 @@ const Filter = ({ setController }) => {
       return { ...prev, [key]: updated };
     });
   };
-  useEffect(() => {
-    setSearchParams((prev) => {
-      const params = Object.fromEntries(prev.entries());
-      delete params.search; // remove search when filters applied
-      return { ...params, ...filters };
-    });
-
-    setController((prev) => ({
-      ...prev,
-      search: "",
-      ...filters,
-      offset: 0,
-    }));
-
-  }, [filters]);
-
-
 
   const renderCheckbox = (key, value, label = value) => (
     <div className="filter-pdng">
