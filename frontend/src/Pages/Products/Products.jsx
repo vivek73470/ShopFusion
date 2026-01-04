@@ -42,13 +42,29 @@ const Products = () => {
   return (
     <>
       <Navbar />
-      <div className="product-screen">
+      <div
+        className="product-screen"
+        style={{
+          height:
+            products?.length !== 0 || isFetching
+              ? "calc(100vh - 165px)"
+              : "auto",
+          overflow:
+            products?.length !== 0 || isFetching
+              ? "scroll"
+              : "visible",
+          scrollbarWidth:
+            products?.length !== 0 || isFetching
+              ? "none"
+              : "auto",
+        }}
+      >
         <div className="product-screen-wrapper">
           <div className="product-screen-wrapper1st">
             <div className="product-filter">
               <Filter />
             </div>
-            <div className="product-listing" style={{margin: (products?.length === 0 || isFetching) ? 'auto' : ''}}>
+            <div className="product-listing" style={{ margin: (products?.length === 0 || isFetching) ? 'auto' : '' }}>
               {isFetching && (
                 <div className="products-loader-main">
                   <CircularProgress size={28} />
