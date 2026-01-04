@@ -3,6 +3,9 @@
     width: 100%;
     margin: 0 auto;
     margin-top: 75px;
+    height: calc(100vh - 180px);
+    overflow: scroll;
+    scrollbar-width: none;
 
 }
 
@@ -13,11 +16,6 @@
 .product-screen-wrapper1st {
     display: flex;
     border-radius: 6px;
-    /* box-shadow:
-    1.5px 3.5px 8px rgba(0, 0, 0, 0.036),
-    4.9px 11.6px 26.8px rgba(0, 0, 0, 0.054),
-    22px 52px 120px rgba(0, 0, 0, 0.09)
-  ; */
     background: #fff;
     padding: 60px 30px;
 }
@@ -33,11 +31,11 @@
 }
 
 .products-loader-main {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
 }
 
 .productlist-design {

@@ -9,6 +9,7 @@ import {
 } from "../../services/api/productApi";
 import CircularProgress from "@mui/material/CircularProgress";
 import Pagination from "../../Components/Pagination/Pagination";
+import NoRecordsFound from "../../Components/NoRecordFound/NoRecordFound";
 
 const LIMIT = 12;
 
@@ -47,7 +48,7 @@ const Products = () => {
             <div className="product-filter">
               <Filter />
             </div>
-            <div className="product-listing">
+            <div className="product-listing" style={{margin: (products?.length === 0 || isFetching) ? 'auto' : ''}}>
               {isFetching && (
                 <div className="products-loader-main">
                   <CircularProgress size={28} />
@@ -55,17 +56,23 @@ const Products = () => {
               )}
 
               {!isFetching && products.length === 0 && (
-                <p>No data found for your search</p>
+                <NoRecordsFound
+                  message="No products found"
+                  subText={`We couldn't find any results for ${searchParams}`}
+                />
               )}
 
               {!isFetching &&
                 products?.map((item) => (
                   <div className="productlist-design" key={item._id}>
-                    <img
-                      className="product-imgstyle"
-                      src={item.image}
-                      alt="cloth products"
-                    />
+                    <div className='product-imageHeight-adjust'>
+                      <img
+                        className="product-imgstyle"
+                        src={item.image}
+                        alt="cloth products"
+                      />
+                    </div>
+
                     <p className="product-brandname">{item.brand_namez}</p>
                     <p className="product-actual-title">
                       {item.title} {item.filtercategory}
