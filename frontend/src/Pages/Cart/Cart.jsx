@@ -13,7 +13,7 @@ import { useAddOrderMutation } from '../../services/api/orderApi';
 import CircularProgress from '@mui/material/CircularProgress';
 
 function Cart() {
-  const { data: cartResponse } = useGetCartQuery();
+  const { data: cartResponse, refetch } = useGetCartQuery();
   const cart = cartResponse?.data || [];
   const [removeFromCart, { isLoading: isRemoving }] = useRemoveFromCartMutation();
   const [addOrder, { isLoading: isOrdering }] = useAddOrderMutation();
@@ -34,9 +34,10 @@ function Cart() {
   const checkoutHandler = async () => {
     try {
       for (const item of cart) {
-        const response = await addOrder(item).unwrap();
+        const response = await addOrder({ ...item, cartId: item._id }).unwrap();
         if (response?.status === true || response === 200) {
           notify.success(`Order for ${item.title} added successfully!`);
+          refetch();
         } else {
           notify.error(`Failed to add order for ${item.title}.`);
         }
