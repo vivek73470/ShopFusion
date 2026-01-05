@@ -1,5 +1,5 @@
 const orderService = require('../../services/orderService/orderService');
-
+const cartService = require('../../services/cartService/cartService')
 
 //  Get all orders
 const getAllOrders = async (req, res) => {
@@ -21,15 +21,19 @@ const getAllOrders = async (req, res) => {
 
 //  Create a new order
 const createOrder = async (req, res) => {
-    const { title, price, description, category, plp, brand_namez, discountedPriceText, actualPriceText,
-        discount_price_box, image, filtercategory, size } = req.body;
+    const { cartId, ...orderData } = req.body;
+    console.log(req.body.cartId);
+
     try {
-        const orderData = { 
-            title, price, description, category, plp, brand_namez, 
-            discountedPriceText, actualPriceText, discount_price_box, 
-            image, filtercategory, size 
-        };
+        // const orderData = {
+        //     title, price, description, category, plp, brand_namez,
+        //     discountedPriceText, actualPriceText, discount_price_box,
+        //     image, filtercategory, size
+        // };
         const data = await orderService.createOrder(orderData);
+        if (cartId) {
+            await cartService.deleteCartItem(cartId)
+        }
         return res.status(201).json({
             status: true,
             message: "Order created successfully",
@@ -62,9 +66,9 @@ const deleteOrder = async (req, res) => {
         });
     } catch (error) {
         console.error('Error deleting order:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
             status: false,
-            message: "Error while deleting order" 
+            message: "Error while deleting order"
         });
     }
 };

@@ -22,7 +22,7 @@ const createOrder = async (orderData) => {
 
 // Delete order by ID
 const deleteOrder = async (id) => {
-    return await Allorder.findByIdAndDelete({ _id: id });
+    return await Allorder.findByIdAndDelete(id);
 };
 
 module.exports = {

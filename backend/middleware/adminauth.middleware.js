@@ -4,7 +4,11 @@ const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {
-        return res.status(401).send("Authentication token is required");
+        return res.status(401).json({
+            status: false,
+            message: "Authentication token is required"
+        });
+
     }
     try {
         const decoded = verifyToken(token);
