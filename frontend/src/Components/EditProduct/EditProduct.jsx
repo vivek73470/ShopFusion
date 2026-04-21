@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { storage } from '../../firebase/firebase.config';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+// import { storage } from '../../firebase/firebase.config';
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 import notify from '../../utils/toastNotifications';
 import { useGetProductByIdQuery, useUpdateProductMutation } from '../../services/api/productApi';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useUploadImageMutation } from '../../services/api/uploadFile';
 
 function EditProduct() {
   const navigate = useNavigate()
@@ -16,6 +19,8 @@ function EditProduct() {
   const { data: editproduct, isLoading: isLoadingProduct } = useGetProductByIdQuery(id);
   const [updateProduct] = useUpdateProductMutation();
   const [submitting, setSubmitting] = useState(false)
+
+  const [uploadImage] = useUploadImageMutation();
 
   const {
     register,
@@ -80,16 +85,21 @@ function EditProduct() {
     try {
       let updatedImageURL = data.image; // Default to existing image URL
 
-      // If a new image is selected, upload it to Firebase
+      // remove Firebase
+      // if (imageFile) {
+      //   const uniqueFileName = `${Date.now()}_${imageFile.name}`;
+      //   const storageRef = ref(storage, `images/${uniqueFileName}`);
+
+      //   // Upload the image file to Firebase
+      //   const snapshot = await uploadBytes(storageRef, imageFile);
+
+      //   // Get the download URL of the uploaded image
+      //   updatedImageURL = await getDownloadURL(snapshot.ref);
+      // }
+
       if (imageFile) {
-        const uniqueFileName = `${Date.now()}_${imageFile.name}`;
-        const storageRef = ref(storage, `images/${uniqueFileName}`);
-
-        // Upload the image file to Firebase
-        const snapshot = await uploadBytes(storageRef, imageFile);
-
-        // Get the download URL of the uploaded image
-        updatedImageURL = await getDownloadURL(snapshot.ref);
+        const uploadRes = await uploadImage(imageFile).unwrap();
+        updatedImageURL = uploadRes.imageUrl;
       }
 
       // Prepare updated product data

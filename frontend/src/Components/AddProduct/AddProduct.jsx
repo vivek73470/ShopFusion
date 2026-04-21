@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import './index.css'
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { storage } from '../../firebase/firebase.config';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+// remove firebase
+// import { storage } from '../../firebase/firebase.config';
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 import notify from '../../utils/toastNotifications';
 import { useAddProductMutation } from '../../services/api/productApi';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useUploadImageMutation } from '../../services/api/uploadFile';
 
 function Addproduct() {
   const navigate = useNavigate()
@@ -17,6 +21,7 @@ function Addproduct() {
   const [submitting, setSubmitting] = useState(false)
   const [imageError, setImageError] = useState(false);
 
+  const [uploadImage] = useUploadImageMutation();
 
   const {
     register,
@@ -61,12 +66,17 @@ function Addproduct() {
     setImageError(false);
     try {
       setSubmitting(true)
-      // step 1: Upload image to Firebase
-      const uniqueFileName = `${Date.now()}_${imageFile.name}`;
-      const storageRef = ref(storage, `images/${uniqueFileName}`);
 
-      const snapshot = await uploadBytes(storageRef, imageFile); // Upload the image file
-      const downloadURL = await getDownloadURL(snapshot.ref); // Get the download URL
+      // removing firebase
+      // step 1: Upload image to Firebase
+      // const uniqueFileName = `${Date.now()}_${imageFile.name}`;
+      // const storageRef = ref(storage, `images/${uniqueFileName}`);
+
+      // const snapshot = await uploadBytes(storageRef, imageFile); // Upload the image file
+      // const downloadURL = await getDownloadURL(snapshot.ref); // Get the download URL
+
+      const uploadRes = await uploadImage(imageFile).unwrap();
+      const downloadURL = uploadRes.imageUrl;
 
       // Step 2: Add the download URL to product data
       const productData = {
