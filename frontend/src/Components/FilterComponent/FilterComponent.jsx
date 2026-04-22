@@ -25,23 +25,39 @@ const Filter = () => {
     }
   }, [searchParams]);
 
+  // useEffect(() => {
+  //   const params = {};
+
+  //   if (filters.category.length) params.category = filters.category;
+  //   if (filters.brand_namez.length) params.brand_namez = filters.brand_namez;
+  //   if (filters.size.length) params.size = filters.size;
+  //   if (filters.filtercategory.length)
+  //     params.filtercategory = filters.filtercategory;
+
+  //   // Only update if there are actual filter changes
+  //   const hasFilters = Object.keys(params).length > 0;
+  //   const currentSearch = searchParams.get("search");
+
+  //   if (hasFilters || !currentSearch) {
+  //     setSearchParams(params);
+  //   }
+  // }, [filters, setSearchParams]);
   useEffect(() => {
-    const params = {};
+  const params = {};
 
-    if (filters.category.length) params.category = filters.category;
-    if (filters.brand_namez.length) params.brand_namez = filters.brand_namez;
-    if (filters.size.length) params.size = filters.size;
-    if (filters.filtercategory.length)
-      params.filtercategory = filters.filtercategory;
+  if (filters.category.length) params.category = filters.category;
+  if (filters.brand_namez.length) params.brand_namez = filters.brand_namez;
+  if (filters.size.length) params.size = filters.size;
+  if (filters.filtercategory.length)
+    params.filtercategory = filters.filtercategory;
 
-    // Only update if there are actual filter changes
-    const hasFilters = Object.keys(params).length > 0;
-    const currentSearch = searchParams.get("search");
+  const hasFilters = Object.keys(params).length > 0;
+  const currentSearch = searchParams.get("search");
 
-    if (hasFilters || !currentSearch) {
-      setSearchParams(params);
-    }
-  }, [filters, setSearchParams]);
+  if (hasFilters || !currentSearch) {
+    setSearchParams(params);
+  }
+}, [filters, setSearchParams, searchParams]);
 
   const handleCheckboxChange = (key, value, checked) => {
     setFilters((prev) => {
