@@ -6,7 +6,7 @@ import notify from '../../utils/toastNotifications';
 
 
 function CartAdmin() {
-    const { data: cartData, isLoading } = useGetCartQuery();
+    const { data: cartData } = useGetCartQuery();
     const [removeFromCart] = useRemoveFromCartMutation();
     const cart = cartData?.data || [];
 

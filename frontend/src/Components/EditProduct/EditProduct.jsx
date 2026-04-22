@@ -27,7 +27,7 @@ function EditProduct() {
     handleSubmit,
     formState: { errors },
     reset,
-    watch
+    // watch
   } = useForm({
     defaultValues: {
       category: '',

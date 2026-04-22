@@ -19,9 +19,14 @@ const Products = () => {
   const [page, setPage] = useState(1);
 
   // reset page when search or filters change
-  useEffect(() => {
-    setPage(1);
-  }, [searchParams.toString()]);
+  // useEffect(() => {
+  //   setPage(1);
+  // }, [searchParams.toString()]);
+  const searchParamsString = searchParams.toString();
+
+useEffect(() => {
+  setPage(1);
+}, [searchParamsString]);
 
   const offset = (page - 1) * LIMIT;
   const queryParams = React.useMemo(() => ({

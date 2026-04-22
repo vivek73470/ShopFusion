@@ -41,7 +41,7 @@ const Filter = () => {
     if (hasFilters || !currentSearch) {
       setSearchParams(params);
     }
-  }, [filters, searchParams]);
+  }, [filters, setSearchParams]);
 
   const handleCheckboxChange = (key, value, checked) => {
     setFilters((prev) => {
